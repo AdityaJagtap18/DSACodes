@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+#include <cfloat>
+
+using namespace std;
+
+// Function to calculate the optimal cost of a binary search tree
+float optimalBST(vector<int>& keys, vector<float>& freq) {
+    int n = keys.size();
+    vector<vector<float> > cost(n, vector<float>(n, 0));
+
+    // Initialize cost table for single keys
+    for (int i = 0; i < n; ++i) {
+        cost[i][i] = freq[i];
+    }
+
+    // Calculate cost for all possible subtrees
+    for (int L = 2; L <= n; ++L) {
+        for (int i = 0; i < n - L + 1; ++i) {
+            int j = i + L - 1;
+            cost[i][j] = FLT_MAX;
+
+            // Try all possible roots in the current subtree
+            for (int r = i; r <= j; ++r) {
+                float c = 0;
+                for (int k = i; k <= j; ++k) {
+                    c += freq[k];
+                }
+                if (r > i) {
+                    c += cost[i][r - 1];
+                }
+                if (r < j) {
+                    c += cost[r + 1][j];
+                }
+                if (c < cost[i][j]) {
+                    cost[i][j] = c;
+                }
+            }
+        }
+    }
+
+    return cost[0][n - 1];
+}
+
+int main() {
+    vector<int> keys(3);
+    keys[0] = 10;
+    keys[1] = 12;
+    keys[2] = 20;
+
+    vector<float> freq(3);
+    freq[0] = 0.34;
+    freq[1] = 0.33;
+    freq[2] = 0.33;
+
+    float optimalCost = optimalBST(keys, freq);
+    cout << "Optimal BST cost: " << optimalCost << endl;
+
+    return 0;
+}
