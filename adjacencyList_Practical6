@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Graph {
+private:
+    int numVertices;
+    vector<vector<int> > adjacencyList;
+
+public:
+    Graph(int vertices) : numVertices(vertices), adjacencyList(vertices) {}
+
+    void addEdge(int u, int v) {
+        adjacencyList[u].push_back(v);
+        adjacencyList[v].push_back(u);
+    }
+
+    vector<int> getAdjacentVertices(int u) {
+        return adjacencyList[u];
+    }
+};
+
+int main() {
+    Graph fightGraph(4);  // Assuming 4 vertices in the graph
+
+    fightGraph.addEdge(0, 1);  // John - Alice
+    fightGraph.addEdge(0, 2);  // John - Bob
+    fightGraph.addEdge(1, 2);  // Alice - Bob
+    fightGraph.addEdge(2, 3);  // Bob - Charlie
+
+    vector<int> adjacentVertices = fightGraph.getAdjacentVertices(0);
+    cout << "Adjacent vertices of 0 (John): ";
+    for (int i = 0; i < adjacentVertices.size(); ++i) {
+        cout << adjacentVertices[i] << " ";
+    }
+    cout << endl;
+
+    adjacentVertices = fightGraph.getAdjacentVertices(1);
+    cout << "Adjacent vertices of 1 (Alice): ";
+    for (int i = 0; i < adjacentVertices.size(); ++i) {
+        cout << adjacentVertices[i] << " ";
+    }
+    cout << endl;
+
+    adjacentVertices = fightGraph.getAdjacentVertices(2);
+    cout << "Adjacent vertices of 2 (Bob): ";
+    for (int i = 0; i < adjacentVertices.size(); ++i) {
+        cout << adjacentVertices[i] << " ";
+    }
+    cout << endl;
+
+    adjacentVertices = fightGraph.getAdjacentVertices(3);
+    cout << "Adjacent vertices of 3 (Charlie): ";
+    for (int i = 0; i < adjacentVertices.size(); ++i) {
+        cout << adjacentVertices[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
