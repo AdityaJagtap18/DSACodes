@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct PhoneLine {
+    int office1, office2, cost;
+};
+
+bool comparePhoneLines(const PhoneLine& a, const PhoneLine& b) {
+    return a.cost < b.cost;
+}
+
+void connectOffices(vector<PhoneLine>& phoneLines, int numOffices) {
+    sort(phoneLines.begin(), phoneLines.end(), comparePhoneLines);
+
+    vector<int> parent(numOffices);
+    vector<int> rank(numOffices, 0);
+
+    for (int i = 0; i < numOffices; i++) {
+        parent[i] = i;
+    }
+
+    int totalCost = 0;
+    vector<PhoneLine> leasedLines;
+
+    for (int i = 0; i < phoneLines.size(); i++) {
+        int office1Root = parent[phoneLines[i].office1];
+        int office2Root = parent[phoneLines[i].office2];
+
+        if (office1Root != office2Root) {
+            totalCost += phoneLines[i].cost;
+            leasedLines.push_back(phoneLines[i]);
+
+            if (rank[office1Root] < rank[office2Root]) {
+                parent[office1Root] = office2Root;
+            } else if (rank[office1Root] > rank[office2Root]) {
+                parent[office2Root] = office1Root;
+            } else {
+                parent[office2Root] = office1Root;
+                rank[office1Root]++;
+            }
+        }
+    }
+
+    cout << "Leased Phone Lines:" << endl;
+    for (int i = 0; i < leasedLines.size(); i++) {
+        cout << leasedLines[i].office1 << " -- " << leasedLines[i].office2 << " : " << leasedLines[i].cost << endl;
+    }
+
+    cout << "Total Cost: " << totalCost << endl;
+}
+
+int main() {
+    int numOffices = 5;
+    vector<PhoneLine> phoneLines;
+    phoneLines.push_back({0, 1, 2});
+    phoneLines.push_back({0, 3, 6});
+    phoneLines.push_back({1, 2, 3});
+    phoneLines.push_back({1, 3, 8});
+    phoneLines.push_back({1, 4, 5});
+    phoneLines.push_back({2, 4, 7});
+    phoneLines.push_back({3, 4, 9});
+
+    connectOffices(phoneLines, numOffices);
+
+    return 0;
+}
