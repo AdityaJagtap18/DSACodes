@@ -1,0 +1,49 @@
+#include <iostream>
+#include <map>
+#include <string>
+
+using namespace std;
+
+int main() {
+    map<string, string> dictionary;
+
+    // Adding new keywords and meanings
+    dictionary.insert(make_pair("apple", "A fruit"));
+    dictionary.insert(make_pair("banana", "A tropical fruit"));
+    dictionary.insert(make_pair("cat", "A domestic animal"));
+
+    // Displaying the data in ascending order
+    cout << "Ascending order:" << endl;
+    for (map<string, string>::iterator it = dictionary.begin(); it != dictionary.end(); ++it) {
+        cout << "Keyword: " << it->first << ", Meaning: " << it->second << endl;
+    }
+
+    // Updating the meaning of a keyword
+    dictionary["apple"] = "A delicious fruit";
+
+    // Displaying the updated data in ascending order
+    cout << "Updated data in ascending order:" << endl;
+    for (map<string, string>::iterator it = dictionary.begin(); it != dictionary.end(); ++it) {
+        cout << "Keyword: " << it->first << ", Meaning: " << it->second << endl;
+    }
+
+    // Deleting a keyword
+    dictionary.erase("banana");
+
+    // Displaying the data after deletion in descending order
+    cout << "Data after deletion in descending order:" << endl;
+    for (map<string, string>::reverse_iterator it = dictionary.rbegin(); it != dictionary.rend(); ++it) {
+        cout << "Keyword: " << it->first << ", Meaning: " << it->second << endl;
+    }
+
+    // Searching for a keyword
+    string keyword = "cat";
+    map<string, string>::iterator it = dictionary.find(keyword);
+    if (it != dictionary.end()) {
+        cout << "Meaning of keyword '" << keyword << "': " << it->second << endl;
+    } else {
+        cout << "Keyword not found" << endl;
+    }
+
+    return 0;
+}
