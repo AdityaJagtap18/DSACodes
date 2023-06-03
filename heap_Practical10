@@ -1,0 +1,30 @@
+#include <iostream>
+#include <climits>
+
+using namespace std;
+
+int main() {
+    // Input marks obtained by students
+    int marks[] = {85, 90, 76, 92, 88, 81, 94, 79};
+    int numStudents = sizeof(marks) / sizeof(marks[0]);
+
+    // Initialize variables for maximum and minimum marks
+    int maxMarks = INT_MIN;
+    int minMarks = INT_MAX;
+
+    // Find maximum and minimum marks
+    for (int i = 0; i < numStudents; ++i) {
+        if (marks[i] > maxMarks) {
+            maxMarks = marks[i];
+        }
+        if (marks[i] < minMarks) {
+            minMarks = marks[i];
+        }
+    }
+
+    // Output the maximum and minimum marks
+    cout << "Maximum marks: " << maxMarks << endl;
+    cout << "Minimum marks: " << minMarks << endl;
+
+    return 0;
+}
