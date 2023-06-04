@@ -1,26 +1,32 @@
 #include <iostream>
-#include <climits>
+#include <vector>
+#include <algorithm> // Required for make_heap and pop_heap functions
 
 using namespace std;
 
 int main() {
     // Input marks obtained by students
-    int marks[] = {85, 90, 76, 92, 88, 81, 94, 79};
-    int numStudents = sizeof(marks) / sizeof(marks[0]);
+    vector<int> marks;
+    marks.push_back(85);
+    marks.push_back(90);
+    marks.push_back(76);
+    marks.push_back(92);
+    marks.push_back(88);
+    marks.push_back(81);
+    marks.push_back(94);
+    marks.push_back(79);
 
-    // Initialize variables for maximum and minimum marks
-    int maxMarks = INT_MIN;
-    int minMarks = INT_MAX;
+    // Build max heap
+    make_heap(marks.begin(), marks.end());
 
-    // Find maximum and minimum marks
-    for (int i = 0; i < numStudents; ++i) {
-        if (marks[i] > maxMarks) {
-            maxMarks = marks[i];
-        }
-        if (marks[i] < minMarks) {
-            minMarks = marks[i];
-        }
-    }
+    // Find maximum marks
+    int maxMarks = marks.front();
+
+    // Build min heap
+    make_heap(marks.begin(), marks.end(), greater<int>());
+
+    // Find minimum marks
+    int minMarks = marks.front();
 
     // Output the maximum and minimum marks
     cout << "Maximum marks: " << maxMarks << endl;
