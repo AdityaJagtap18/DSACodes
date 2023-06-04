@@ -1,49 +1,122 @@
 #include <iostream>
-#include <map>
-#include <string>
+#include <cstring>
 
-using namespace std;
+class Tree {
+private:
+    struct Node {
+        char key[10];
+        char meaning[10];
+        Node* left;
+        Node* right;
+    };
+    Node* root;
+
+public:
+    Tree() : root(nullptr) {}
+    void create();
+    void inorderRec(Node* root);
+    void postorderRec(Node* root);
+    void inorder();
+    void postorder();
+};
+
+void Tree::create() {
+    Node* newNode = new Node;
+    newNode->left = newNode->right = nullptr;
+
+    std::cout << "\n\tEnter the Keyword: ";
+    std::cin >> newNode->key;
+    std::cout << "\n\tEnter the Meaning of " << newNode->key << ": ";
+    std::cin >> newNode->meaning;
+
+    if (root == nullptr)
+        root = newNode;
+    else {
+        Node* current = root;
+        Node* parent = nullptr;
+
+        while (current != nullptr) {
+            parent = current;
+            if (strcmp(newNode->key, current->key) < 0)
+                current = current->left;
+            else
+                current = current->right;
+        }
+
+        if (strcmp(newNode->key, parent->key) < 0)
+            parent->left = newNode;
+        else
+            parent->right = newNode;
+    }
+}
+
+void Tree::inorderRec(Node* root) {
+    if (root != nullptr) {
+        inorderRec(root->left);
+        std::cout << "\n\t" << root->key << "\t" << root->meaning;
+        inorderRec(root->right);
+    }
+}
+
+void Tree::postorderRec(Node* root) {
+    if (root != nullptr) {
+        postorderRec(root->right);
+        std::cout << "\n\t" << root->key << "\t" << root->meaning;
+        postorderRec(root->left);
+    }
+}
+
+void Tree::inorder() {
+    inorderRec(root);
+}
+
+void Tree::postorder() {
+    postorderRec(root);
+}
 
 int main() {
-    map<string, string> dictionary;
+    Tree tr;
+    int ch;
+    char ans;
 
-    // Adding new keywords and meanings
-    dictionary.insert(make_pair("apple", "A fruit"));
-    dictionary.insert(make_pair("banana", "A tropical fruit"));
-    dictionary.insert(make_pair("cat", "A domestic animal"));
+    do {
+        std::cout << "\n\t***** BST Operations *****";
+        std::cout << "\n\t1. Create\n\t2. Display\n\t3. Exit";
+        std::cout << "\n\t.....Enter Your Choice: ";
+        std::cin >> ch;
 
-    // Displaying the data in ascending order
-    cout << "Ascending order:" << endl;
-    for (map<string, string>::iterator it = dictionary.begin(); it != dictionary.end(); ++it) {
-        cout << "Keyword: " << it->first << ", Meaning: " << it->second << endl;
-    }
+        switch (ch) {
+            case 1:
+                do {
+                    tr.create();
+                    std::cout << "......Do You Want To Continue: ";
+                    std::cin >> ans;
+                } while (ans == 'y' || ans == 'Y');
+                break;
 
-    // Updating the meaning of a keyword
-    dictionary["apple"] = "A delicious fruit";
+            case 2:
+                std::cout << "\n\t\t1. Ascending\n\t\t2. Descending\n\t\t.....Enter Your Choice: ";
+                std::cin >> ch;
+                std::cout << "\n\tKeyword\tMeaning";
 
-    // Displaying the updated data in ascending order
-    cout << "Updated data in ascending order:" << endl;
-    for (map<string, string>::iterator it = dictionary.begin(); it != dictionary.end(); ++it) {
-        cout << "Keyword: " << it->first << ", Meaning: " << it->second << endl;
-    }
+                switch (ch) {
+                    case 1:
+                        tr.inorder();
+                        break;
 
-    // Deleting a keyword
-    dictionary.erase("banana");
+                    case 2:
+                        tr.postorder();
+                        break;
+                }
+                break;
 
-    // Displaying the data after deletion in descending order
-    cout << "Data after deletion in descending order:" << endl;
-    for (map<string, string>::reverse_iterator it = dictionary.rbegin(); it != dictionary.rend(); ++it) {
-        cout << "Keyword: " << it->first << ", Meaning: " << it->second << endl;
-    }
+            case 3:
+                break;
+        }
 
-    // Searching for a keyword
-    string keyword = "cat";
-    map<string, string>::iterator it = dictionary.find(keyword);
-    if (it != dictionary.end()) {
-        cout << "Meaning of keyword '" << keyword << "': " << it->second << endl;
-    } else {
-        cout << "Keyword not found" << endl;
-    }
+        std::cout << "\n\t\t..... Do You Want to Continue: ";
+        std::cin >> ans;
+    } while (ans == 'y' || ans == 'Y');
 
     return 0;
 }
