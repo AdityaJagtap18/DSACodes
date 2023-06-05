@@ -59,7 +59,7 @@ public:
 			inorderrec(root->left);
 			cout << "\n\t" << root->key << "\t" << root->meaning;
 			inorderrec(root->right);
-			}
+		}
 	}
 
 	void postorderrec(node* root) {
@@ -76,7 +76,10 @@ int main() {
 
 	tr.create();
 	tr.create();
-    tr.create();
+	tr.create();
+	tr.create();
+
+
 
 	cout << "Inorder traversal:" << endl;
 	tr.inorder();
