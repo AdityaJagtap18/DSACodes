@@ -1,14 +1,16 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 class Heap {
 private:
-    std::vector<int> heap;
+    vector<int> heap;
 
     void heapifyUp(int index) {
         int parent = (index - 1) / 2;
         while (index > 0 && heap[index] > heap[parent]) {
-            std::swap(heap[index], heap[parent]);
+            swap(heap[index], heap[parent]);
             index = parent;
             parent = (index - 1) / 2;
         }
@@ -28,7 +30,7 @@ private:
         }
 
         if (largest != index) {
-            std::swap(heap[index], heap[largest]);
+            swap(heap[index], heap[largest]);
             heapifyDown(largest);
         }
     }
@@ -41,7 +43,7 @@ public:
 
     void removeMaxElement() {
         if (heap.empty()) {
-            std::cout << "Heap is empty." << std::endl;
+            cout << "Heap is empty." << endl;
             return;
         }
 
@@ -52,7 +54,7 @@ public:
 
     int getMaxElement() const {
         if (heap.empty()) {
-            std::cout << "Heap is empty." << std::endl;
+            cout << "Heap is empty." << endl;
             return -1; // Or any other appropriate default value
         }
         return heap[0];
@@ -65,16 +67,16 @@ public:
 
 int main() {
     int numStudents;
-    std::cout << "Enter the number of students: ";
-    std::cin >> numStudents;
+    cout << "Enter the number of students: ";
+    cin >> numStudents;
 
     Heap marksHeap;
 
-    std::cout << "Enter the marks obtained by each student:\n";
+    cout << "Enter the marks obtained by each student:\n";
     for (int i = 0; i < numStudents; i++) {
         int marks;
-        std::cout << "Student " << i + 1 << ": ";
-        std::cin >> marks;
+        cout << "Student " << i + 1 << ": ";
+        cin >> marks;
         marksHeap.addElement(marks);
     }
 
@@ -82,8 +84,8 @@ int main() {
     marksHeap.removeMaxElement();
     int minMarks = marksHeap.getMaxElement();  // Minimum marks
 
-    std::cout << "Maximum marks: " << maxMarks << std::endl;
-    std::cout << "Minimum marks: " << minMarks << std::endl;
+    cout << "Maximum marks: " << maxMarks << endl;
+    cout << "Minimum marks: " << minMarks << endl;
 
     return 0;
 }
