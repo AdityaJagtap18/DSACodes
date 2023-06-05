@@ -143,6 +143,13 @@ int main() {
                     }
                 }
                 break;
+
+            case 5:
+                cout << "Exiting the program.\n";
+                break;
+
+            default:
+                cout << "Invalid choice! Please try again.\n";
         }
 
     } while (choice != 5);
