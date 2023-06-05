@@ -2,8 +2,7 @@
 #include <fstream>
 using namespace std;
 
-class Employee
-{
+class Employee {
 public:
     int employeeId;
     string name;
@@ -11,141 +10,139 @@ public:
     int experience;
     int age;
 
-    void accept()
-    {
-        cout << "\n\tEnter Employee ID: ";
+    void accept() {
+        cout << "\nEnter Employee ID: ";
         cin >> employeeId;
-        cout << "\n\tEnter the Name: ";
+        cout << "Enter the Name: ";
         cin >> name;
-        cout << "\n\tEnter the Designation: ";
+        cout << "Enter the Designation: ";
         cin >> designation;
-        cout << "\n\tEnter the Experience: ";
+        cout << "Enter the Experience: ";
         cin >> experience;
-        cout << "\n\tEnter the Age: ";
+        cout << "Enter the Age: ";
         cin >> age;
     }
 
-    int getEmployeeId()
-    {
-        return employeeId;
-    }
-
-    void show()
-    {
-        cout << "\n\t" << employeeId << "\t\t" << name << "\t\t" << designation << "\t\t" << experience << "\t\t" << age;
+    void show() {
+        cout << "\nEmployee ID: " << employeeId << "\nName: " << name
+             << "\nDesignation: " << designation << "\nExperience: " << experience
+             << "\nAge: " << age << "\n";
     }
 };
 
-int main()
-{
+int main() {
     Employee e;
-    int choice, ch1;
-    int employeeId;
-    fstream file, temp;
+    int choice, employeeId;
 
-    do
-    {
-        cout << "\n>>>>>>>>>>>>>>>>>>>>>>MENU<<<<<<<<<<<<<<<<<<<<";
-        cout << "\n1. Insert\n2. Show\n3. Search\n4. Delete an Employee Record\n5. Exit\n\tEnter the Choice --> ";
+    do {
+        cout << "\nMENU:\n";
+        cout << "1. Insert\n";
+        cout << "2. Show\n";
+        cout << "3. Search\n";
+        cout << "4. Delete an Employee Record\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
         cin >> choice;
 
-        switch (choice)
-        {
-        case 1:
-            file.open("employee.txt", ios::out | ios::app);
-            if (!file)
-            {
-                cout << "Error creating file!" << endl;
-                break;
-            }
-
-            do
-            {
-                e.accept();
-                file.write(reinterpret_cast<char *>(&e), sizeof(e));
-
-                cout << "\nDo you want to enter more records?\n1. Yes\n2. No\n--> ";
-                cin >> ch1;
-            } while (ch1 == 1);
-
-            file.close();
-            break;
-
-        case 2:
-            file.open("employee.txt", ios::in);
-            if (!file)
-            {
-                cout << "Error opening file!" << endl;
-                break;
-            }
-
-            file.read(reinterpret_cast<char *>(&e), sizeof(e));
-            while (!file.eof())
-            {
-                e.show();
-                file.read(reinterpret_cast<char *>(&e), sizeof(e));
-            }
-            file.close();
-            break;
-
-        case 3:
-            cout << "Enter Employee ID --> ";
-            cin >> employeeId;
-
-            file.open("employee.txt", ios::in);
-            if (!file)
-            {
-                cout << "Error opening file!" << endl;
-                break;
-            }
-
-            file.read(reinterpret_cast<char *>(&e), sizeof(e));
-            while (!file.eof())
-            {
-                if (employeeId == e.employeeId)
+        switch (choice) {
+            case 1:
                 {
-                    e.show();
-                    break;
+                    ofstream file("employee.txt", ios::app);
+                    if (!file) {
+                        cout << "Error creating file!" << endl;
+                        break;
+                    }
+
+                    e.accept();
+                    file << e.employeeId << " " << e.name << " " << e.designation << " "
+                         << e.experience << " " << e.age << endl;
+
+                    cout << "Record inserted successfully!\n";
+                    file.close();
                 }
-                file.read(reinterpret_cast<char *>(&e), sizeof(e));
-            }
-            file.close();
-            break;
-
-        case 4:
-            cout << "Enter Employee ID to delete --> ";
-            cin >> employeeId;
-
-            file.open("employee.txt", ios::in);
-            if (!file)
-            {
-                cout << "Error opening file!" << endl;
                 break;
-            }
 
-            temp.open("temp.txt", ios::out);
-            if (!temp)
-            {
-                cout << "Error creating temporary file!" << endl;
-                file.close();
-                break;
-            }
-
-            file.read(reinterpret_cast<char *>(&e), sizeof(e));
-            while (!file.eof())
-            {
-                if (e.employeeId != employeeId)
+            case 2:
                 {
-                    temp.write(reinterpret_cast<char *>(&e), sizeof(e));
+                    ifstream file("employee.txt");
+                    if (!file) {
+                        cout << "Error opening file!" << endl;
+                        break;
+                    }
+
+                    while (file >> e.employeeId >> e.name >> e.designation >> e.experience >> e.age) {
+                        e.show();
+                    }
+                    file.close();
                 }
-                file.read(reinterpret_cast<char *>(&e), sizeof(e));
-            }
-            cout << "The record with the Employee ID " << employeeId << " has been deleted." << endl;
-            file.close();
-            temp.close();
-            remove("employee.txt");
-            rename("temp.txt", "employee.txt");
-            break;
+                break;
+
+            case 3:
+                {
+                    cout << "Enter Employee ID: ";
+                    cin >> employeeId;
+
+                    ifstream file("employee.txt");
+                    if (!file) {
+                        cout << "Error opening file!" << endl;
+                        break;
+                    }
+
+                    bool found = false;
+                    while (file >> e.employeeId >> e.name >> e.designation >> e.experience >> e.age) {
+                        if (e.employeeId == employeeId) {
+                            e.show();
+                            found = true;
+                            break;
+                        }
+                    }
+                    file.close();
+
+                    if (!found) {
+                        cout << "Employee record not found!\n";
+                    }
+                }
+                break;
+
+            case 4:
+                {
+                    cout << "Enter Employee ID to delete: ";
+                    cin >> employeeId;
+
+                    ifstream file("employee.txt");
+                    if (!file) {
+                        cout << "Error opening file!" << endl;
+                        break;
+                    }
+
+                    ofstream temp("temp.txt");
+                    if (!temp) {
+                        cout << "Error creating temporary file!" << endl;
+                        file.close();
+                        break;
+                    }
+
+                    bool deleted = false;
+                    while (file >> e.employeeId >> e.name >> e.designation >> e.experience >> e.age) {
+                        if (e.employeeId != employeeId) {
+                            temp << e.employeeId << " " << e.name << " " << e.designation << " "
+                                 << e.experience << " " << e.age << endl;
+                        } else {
+                            deleted = true;
+                        }
+                    }
+                    file.close();
+                    temp.close();
+
+                    if (deleted) {
+                        remove("employee.txt");
+                        rename("temp.txt", "employee.txt");
+                        cout << "The record with the Employee ID " << employeeId << " has been deleted.\n";
+                    } else {
+                        cout << "Employee record not found!\n";
+                    }
+                }
+                break;
         }
 
     } while (choice != 5);
