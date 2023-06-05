@@ -1,122 +1,88 @@
 #include <iostream>
 #include <cstring>
 
+using namespace std;
+
 class Tree {
-private:
-    struct Node {
-        char key[10];
-        char meaning[10];
-        Node* left;
-        Node* right;
-    };
-    Node* root;
+	struct node {
+		char key[10];
+		char meaning[10];
+		node* left;
+		node* right;
+	};
+	node* root;
 
 public:
-    Tree() : root(nullptr) {}
-    void create();
-    void inorderRec(Node* root);
-    void postorderRec(Node* root);
-    void inorder();
-    void postorder();
+	Tree() {
+		root = NULL;
+	}
+
+	void inorder() {
+		inorderrec(root);
+	}
+
+	void postorder() {
+		postorderrec(root);
+	}
+
+	void create() {
+		node* newnode = new node;
+		newnode->left = newnode->right = NULL;
+		cout << "Enter the keyword: ";
+		cin >> newnode->key;
+		cout << "Enter the meaning: ";
+		cin >> newnode->meaning;
+
+		if (root == NULL)
+			root = newnode;
+		else {
+			node* current = root;
+			node* parent = NULL;
+
+			while (current != NULL) {
+				parent = current;
+				if (strcmp(newnode->key, current->key) < 0)
+					current = current->left;
+				else
+					current = current->right;
+			}
+
+			if (strcmp(newnode->key, parent->key) < 0)
+				parent->left = newnode;
+			else
+				parent->right = newnode;
+		}
+	}
+
+	void inorderrec(node* root) {
+		if (root != NULL) {
+			inorderrec(root->left);
+			cout << "\n\t" << root->key << "\t" << root->meaning;
+			inorderrec(root->right);
+			}
+	}
+
+	void postorderrec(node* root) {
+		if (root != NULL) {
+			postorderrec(root->left);
+			postorderrec(root->right);
+			cout << "\n\t" << root->key << "\t" << root->meaning;
+		}
+	}
 };
 
-void Tree::create() {
-    Node* newNode = new Node;
-    newNode->left = newNode->right = nullptr;
-
-    std::cout << "\n\tEnter the Keyword: ";
-    std::cin >> newNode->key;
-    std::cout << "\n\tEnter the Meaning of " << newNode->key << ": ";
-    std::cin >> newNode->meaning;
-
-    if (root == nullptr)
-        root = newNode;
-    else {
-        Node* current = root;
-        Node* parent = nullptr;
-
-        while (current != nullptr) {
-            parent = current;
-            if (strcmp(newNode->key, current->key) < 0)
-                current = current->left;
-            else
-                current = current->right;
-        }
-
-        if (strcmp(newNode->key, parent->key) < 0)
-            parent->left = newNode;
-        else
-            parent->right = newNode;
-    }
-}
-
-void Tree::inorderRec(Node* root) {
-    if (root != nullptr) {
-        inorderRec(root->left);
-        std::cout << "\n\t" << root->key << "\t" << root->meaning;
-        inorderRec(root->right);
-    }
-}
-
-void Tree::postorderRec(Node* root) {
-    if (root != nullptr) {
-        postorderRec(root->right);
-        std::cout << "\n\t" << root->key << "\t" << root->meaning;
-        postorderRec(root->left);
-    }
-}
-
-void Tree::inorder() {
-    inorderRec(root);
-}
-
-void Tree::postorder() {
-    postorderRec(root);
-}
-
 int main() {
-    Tree tr;
-    int ch;
-    char ans;
+	Tree tr;
 
-    do {
-        std::cout << "\n\t***** BST Operations *****";
-        std::cout << "\n\t1. Create\n\t2. Display\n\t3. Exit";
-        std::cout << "\n\t.....Enter Your Choice: ";
-        std::cin >> ch;
+	tr.create();
+	tr.create();
+    tr.create();
 
-        switch (ch) {
-            case 1:
-                do {
-                    tr.create();
-                    std::cout << "......Do You Want To Continue: ";
-                    std::cin >> ans;
-                } while (ans == 'y' || ans == 'Y');
-                break;
+	cout << "Inorder traversal:" << endl;
+	tr.inorder();
 
-            case 2:
-                std::cout << "\n\t\t1. Ascending\n\t\t2. Descending\n\t\t.....Enter Your Choice: ";
-                std::cin >> ch;
-                std::cout << "\n\tKeyword\tMeaning";
+	cout << "\nPostorder traversal:" << endl;
+	tr.postorder();
 
-                switch (ch) {
-                    case 1:
-                        tr.inorder();
-                        break;
-
-                    case 2:
-                        tr.postorder();
-                        break;
-                }
-                break;
-
-            case 3:
-                break;
-        }
-
-        std::cout << "\n\t\t..... Do You Want to Continue: ";
-        std::cin >> ans;
-    } while (ans == 'y' || ans == 'Y');
-
-    return 0;
+	return 0;
 }
