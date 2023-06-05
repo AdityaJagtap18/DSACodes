@@ -1,36 +1,89 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> // Required for make_heap and pop_heap functions
 
-using namespace std;
+class Heap {
+private:
+    std::vector<int> heap;
+
+    void heapifyUp(int index) {
+        int parent = (index - 1) / 2;
+        while (index > 0 && heap[index] > heap[parent]) {
+            std::swap(heap[index], heap[parent]);
+            index = parent;
+            parent = (index - 1) / 2;
+        }
+    }
+
+    void heapifyDown(int index) {
+        int leftChild = 2 * index + 1;
+        int rightChild = 2 * index + 2;
+        int largest = index;
+
+        if (leftChild < heap.size() && heap[leftChild] > heap[largest]) {
+            largest = leftChild;
+        }
+
+        if (rightChild < heap.size() && heap[rightChild] > heap[largest]) {
+            largest = rightChild;
+        }
+
+        if (largest != index) {
+            std::swap(heap[index], heap[largest]);
+            heapifyDown(largest);
+        }
+    }
+
+public:
+    void addElement(int element) {
+        heap.push_back(element);
+        heapifyUp(heap.size() - 1);
+    }
+
+    void removeMaxElement() {
+        if (heap.empty()) {
+            std::cout << "Heap is empty." << std::endl;
+            return;
+        }
+
+        heap[0] = heap.back();
+        heap.pop_back();
+        heapifyDown(0);
+    }
+
+    int getMaxElement() const {
+        if (heap.empty()) {
+            std::cout << "Heap is empty." << std::endl;
+            return -1; // Or any other appropriate default value
+        }
+        return heap[0];
+    }
+
+    int getSize() const {
+        return heap.size();
+    }
+};
 
 int main() {
-    // Input marks obtained by students
-    vector<int> marks;
-    marks.push_back(85);
-    marks.push_back(90);
-    marks.push_back(76);
-    marks.push_back(92);
-    marks.push_back(88);
-    marks.push_back(81);
-    marks.push_back(94);
-    marks.push_back(79);
+    int numStudents;
+    std::cout << "Enter the number of students: ";
+    std::cin >> numStudents;
 
-    // Build max heap
-    make_heap(marks.begin(), marks.end());
+    Heap marksHeap;
 
-    // Find maximum marks
-    int maxMarks = marks.front();
+    std::cout << "Enter the marks obtained by each student:\n";
+    for (int i = 0; i < numStudents; i++) {
+        int marks;
+        std::cout << "Student " << i + 1 << ": ";
+        std::cin >> marks;
+        marksHeap.addElement(marks);
+    }
 
-    // Build min heap
-    make_heap(marks.begin(), marks.end(), greater<int>());
+    int maxMarks = marksHeap.getMaxElement();  // Maximum marks
+    marksHeap.removeMaxElement();
+    int minMarks = marksHeap.getMaxElement();  // Minimum marks
 
-    // Find minimum marks
-    int minMarks = marks.front();
-
-    // Output the maximum and minimum marks
-    cout << "Maximum marks: " << maxMarks << endl;
-    cout << "Minimum marks: " << minMarks << endl;
+    std::cout << "Maximum marks: " << maxMarks << std::endl;
+    std::cout << "Minimum marks: " << minMarks << std::endl;
 
     return 0;
 }
