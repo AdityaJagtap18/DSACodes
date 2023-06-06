@@ -1,88 +1,204 @@
-#include <iostream>
-#include <vector>
-
+PRACTICAL NO: 09
+PROGRAM CODE:
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
 using namespace std;
+class Tree
+  {
+     typedef struct node
+	{
+		char key[10];
+		char meaning[10];
+		struct node *left;
+		struct node * right;
+	}btree;
+    public:
+      btree *New,*root;
+      Tree();
+      void create();
+      void insert(btree *root,btree *New);
+	 void inorder();
+	 void inorder_rec(btree *root);
+	 void postorder();
+	 void postorder_rec(btree *root);
+  };
+Tree::Tree()
+  {
+    root=NULL;
+  }
+void Tree::inorder()
+  {
+	inorder_rec(root);
+  }
+void Tree::inorder_rec(btree *root)
+  {
+	if(root!=NULL)
+	{
+		inorder_rec(root->left);
+		cout<<"\n\t"<<root->key<<"\t"<<root->meaning;
+		inorder_rec(root->right);
+     }
+  }
+void Tree::postorder()
+  {
+	postorder_rec(root);
+  }
+void Tree::postorder_rec(btree *root)
+  {
+	if(root!=NULL)
+	{
+		
+		postorder_rec(root->right);
+		cout<<"\n\t"<<root->key<<"\t"<<root->meaning;
+		postorder_rec(root->left);
+     }
+  }
+void Tree::create()
+  {
+     New=new btree;
+     New->left=New->right=NULL;
+     cout<<"\n\tEnter the Keyword: ";
+     cin>>New->key;
+     cout<<"\n\tEnter the Meaning of "<<New->key<<" : ";
+     cin>>New->meaning;
+     if(root==NULL)
+     	{
+		root=New;
+	}
+     else
+        {
+		insert(root,New);
+        }
+   }
+void Tree::insert(btree *root,btree *New)
+  {
+    
+     if(strcmp(root->key,New->key)>0)
+        {
+	    if(root->left==NULL)
+		root->left=New;
+         else
+          insert(root->left,New);
+	   }
+     else
+        {
+	    if(root->right==NULL)
+		 root->right=New;
+          else 
+           insert(root->right,New);
+	   }	
+  }
+ 
+ main()
+  {
+     Tree tr;
+     int ch;
+	char ans;
+     do
+       {
+	   cout<<"\n\t***** BST Operations *****";
+	   cout<<"\n\t1. Create\n\t2. Display\n\t3. Exit";
+	    cout<<"\n\t.....Enter Your Choice: ";
+	    cin>>ch;
+	    switch(ch)
+ 		{
+			case 1:
+				
+				do
+				{
+						tr.create();
+						cout<<"......Do You Want To Continue: ";
+						cin>>ans;
+				}while(ans=='y'||ans=='Y');
+				break;
+			case 2: cout<<"\n\t\t1. Ascending\n\t\t2. Descending\n\t\t.....Enter Your Choice: ";
+				cin>>ch;
+				cout<<"\n\tKeyword\tMeaning";
 
-void maxHeapify(vector<int>& arr, int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+				switch(ch)
+				{
+					case 1:
+						tr.inorder();
+						break;
+					case 2:
+						tr.postorder();
+						break;
+				}
+				break;
+			case 3:
+				break;
+  		}	
+	cout<<"\n\t\t..... Do You Want to Continue: ";
+	cin>>ans;
+	}while(ans=='y'||ans=='Y');
+  }
 
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
+OUPUT:
+	***** BST Operations *****
+	1. Create
+	2. Display
+	3. Exit
+	.....Enter Your Choice: 1
+	Enter the Keyword: int
+	Enter the Meaning of int : datatype
+......Do You Want To Continue: y
+	Enter the Keyword: for
+	Enter the Meaning of for : loop
+......Do You Want To Continue: y
+	Enter the Keyword: if
+	Enter the Meaning of if : condition
+......Do You Want To Continue: y
+	Enter the Keyword: <
+	Enter the Meaning of < : lessthan
+......Do You Want To Continue: y
+	Enter the Keyword: malloc
+	Enter the Meaning of malloc : memory
+......Do You Want To Continue: y
+	Enter the Keyword: while
+	Enter the Meaning of while : loop
+......Do You Want To Continue: n
+		..... Do You Want to Continue: y
+	***** BST Operations *****
+	1. Create
+	2. Display
+	3. Exit
+	.....Enter Your Choice: 2
+		1. Ascending
+		2. Descending
+		.....Enter Your Choice: 1
+	Keyword	Meaning
+	<	lessthan
+	for	loop
+	if	condition
+	int	datatype
+	malloc	memory
+	while	loop
+		..... Do You Want to Continue: y
+	***** BST Operations *****
+	1. Create
+	2. Display
+	3. Exit
+	.....Enter Your Choice: 2
+		1. Ascending
+		2. Descending
+		.....Enter Your Choice: 2
+	Keyword	Meaning
+	while	loop
+	malloc	memory
+	int	datatype
+	if	condition
+	for	loop
+	<	lessthan
+		..... Do You Want to Continue:
 
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
+                ..... Do You Want to Continue: 1
 
-    if (largest != i) {
-        swap(arr[i], arr[largest]);
-        maxHeapify(arr, n, largest);
-    }
-}
+--------------------------------
+Process exited after 77.47 seconds with return value 0
+Press any key to continue . . .
 
-void buildMaxHeap(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        maxHeapify(arr, n, i);
-    }
-}
 
-void minHeapify(vector<int>& arr, int n, int i) {
-    int smallest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
 
-    if (left < n && arr[left] < arr[smallest])
-        smallest = left;
 
-    if (right < n && arr[right] < arr[smallest])
-        smallest = right;
 
-    if (smallest != i) {
-        swap(arr[i], arr[smallest]);
-        minHeapify(arr, n, smallest);
-    }
-}
-
-void buildMinHeap(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = n / 2 - 1; i >= 0; i--) {
-        minHeapify(arr, n, i);
-    }
-}
-
-int main() {
-    vector<int> marks;
-    int a;
-    cout << "Enter 5 marks: ";
-    for (int i = 0; i < 5; i++) {
-        cin >> a;
-        marks.push_back(a);
-    }
-
-    // Max heap
-    buildMaxHeap(marks);
-
-    cout << "Max heap: ";
-    for (int mark : marks) {
-        cout << mark << " ";
-    }
-    cout << endl;
-
-    int maxElement = marks[0];
-    cout << "Maximum element: " << maxElement << endl;
-
-    // Min heap
-    buildMinHeap(marks);
-
-    cout << "Min heap: ";
-    for (int mark : marks) {
-        cout << mark << " ";
-    }
-    cout << endl;
-
-    int minElement = marks[0];
-    cout << "Minimum element: " << minElement << endl;
-
-    return 0;
-}
