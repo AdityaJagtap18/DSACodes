@@ -1,0 +1,57 @@
+from collections import Counter
+
+def get_marks():
+    try:
+        n = int(input("Enter the number of students: "))
+        marks = []
+
+        for i in range(n):
+            mark = float(input(f"Enter the marks for student {i + 1}: "))
+            marks.append(mark)
+
+        return marks
+
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+
+def compute_average(marks):
+    if not marks:
+        return 0
+    return sum(marks) / len(marks)
+
+def compute_highest_and_lowest(marks):
+    if not marks:
+        return None, None
+    return max(marks), min(marks)
+
+def count_absent_students(marks):
+    if not marks:
+        return 0
+    return marks.count(0)  # Assuming 0 indicates an absent student
+
+def display_highest_frequency_mark(marks):
+    if not marks:
+        return None
+
+    frequency_counter = Counter(marks)
+    highest_frequency = max(frequency_counter.values())
+    most_frequent_marks = [mark for mark, frequency in frequency_counter.items() if frequency == highest_frequency]
+
+    return most_frequent_marks
+
+def main():
+    marks = get_marks()
+
+    average_score = compute_average(marks)
+    highest_score, lowest_score = compute_highest_and_lowest(marks)
+    absent_count = count_absent_students(marks)
+    most_frequent_marks = display_highest_frequency_mark(marks)
+
+    print(f"Average score of the class: {average_score:.2f}")
+    print(f"Highest score in the class: {highest_score}")
+    print(f"Lowest score in the class: {lowest_score}")
+    print(f"Number of absent students: {absent_count}")
+    print(f"Mark(s) with the highest frequency: {most_frequent_marks}")
+
+if _name_ == "_main_":
+    main()
